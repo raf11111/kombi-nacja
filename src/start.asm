@@ -1,13 +1,24 @@
+
+; load from memory debug
+;*=$1000
+;.incprg "..\packmsx\1.prg"
+;msx1end .byte 0
+
 *= $7000
 mainstart
 		lda #$00
 		sta $d020
+		sei
 		jsr DreamLoad
-		; TODO sprawdzaj kody wyjscia itd w/g /dload/doc/dload.html#toc23
-		lda #$00
+        bcc dloadok 	          ;success?
+        lda #<DreamLoadErr          ;error message
+        ldy #>DreamLoadErr
+        jsr $ab1e
+		jmp *
+
+dloadok	lda #$00
 		sta $d021
 		
-		sei    
 		jsr systemSetup
 		
 		;lda #$35
@@ -26,39 +37,59 @@ mainstart
         ldy #>msx1
         jsr loadfile 	
 	
-; depack 
-;		lda #<msx1
+;; load from mem debug
+;depack 
+;		lda #<msx1end
 ;		sta opbase + 1
-;		lda #>msx1
+;		lda #>msx1end
 ;		sta opbase + 2
+;;
+
+
+;depack 
+		lda #<$4857
+		sta opbase + 1
+		lda #>$4857
+		sta opbase + 2
 		
-		;jsr exod_decrunch
-		;jsr $1000
+		jsr exod_decrunch
 
 		lda #<musicirq  ;this is how we set up
 		sta $fffe  ;the address of our interrupt code
 		lda #>musicirq
 		sta $ffff		
+
+musstart		lda #$00
+		tax
+		tay 
+		jsr $1000
+
 		cli
 
 uu2:	jsr keyscan
 		lda $11 ;actkey
 		cmp #$ff	;$ff= no key pressed
 		beq uu2
+
+		cmp #$D ; 'M' character
+		beq loadTune
+		
 		cmp #$40	;convert to screen codes
 		bmi ok2
 		sec
 		sbc #$40
 ok2:
 		sta $0400
-	
-;	wywolaj 1, <msx1, >msx1
-;	wywolaj 2, <msx2, >msx2
-	
+		sta msx1
 	
 x22:	jmp uu2
 		
-	
+;;;
+loadTune:
+		sei
+		jsr loadfile
+		jmp musstart
+		
 ;;;;;;;;;;;;;;;;;;;;
 
 musicirq:
@@ -71,7 +102,7 @@ musicirq:
 
 musplay:
 		inc $d020
-		;jsr $1003
+		jsr $1003
 		dec $d020
 		
 irqend: exitIRQ
@@ -79,8 +110,14 @@ irqend: exitIRQ
 		dec $d020
 		rti		
 
-		;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		
-msx1 	.scru "1"
+msx1 	.scru "1*"
 msx1_len = * - msx1
+
+DreamLoadErr
+.scru "error installing dreamload!"
+.byte 13, 0
+		
+
 		
