@@ -1,23 +1,36 @@
 ShowPic SUBROUTINE
-		lda #$0e
-		sta $d020
-		lda #$06
-		sta $d021
 	
-		lda #$34
+   	ldx #$00
+xxx	lda $0800,x
+	sta $d800,x
+	lda $0900,x
+	sta $d900,x
+	lda $0a00,x
+	sta $da00,x
+	lda $0b00,x
+	sta $db00,x
+	inx
+	bne xxx	
+	
+		; stanard bitmap in bank 0-3fff
+		lda #$3b
 		sta $d011
 		
-		lda #$2c
+		lda #$1c
 		sta $d018
 		
-		spacechk lda $dc01 
-		cmp #$ef 
-		bne spacechk
+		lda #$18
+		sta $d016
 		
-		lda #$1b
-		sta $d011
+		;spacechk lda $dc01 
+		;cmp #$ef 
+		;bne spacechk
 		
-		lda #$14
-		sta $d018
+		; normla screen:
+		;lda #$1b
+		;sta $d011
+		
+		;lda #$14
+		;sta $d018
 		
 		rts

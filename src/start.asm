@@ -16,7 +16,7 @@ mainstart
         jsr $ab1e
 		jmp *
 
-dloadok	lda #$00
+dloadok	lda #$0c
 		sta $d021
 		
 		jsr systemSetup
@@ -29,7 +29,7 @@ dloadok	lda #$00
 		;lda #$37 ; TODO zmiana konfigu wypierdala obsluge klawiatury : czemu???
 		;sta $01
 
-		;jsr ShowPic
+		jsr ShowPic
 	
 	
         lda #msx1_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow

@@ -11,7 +11,7 @@ systemSetup:
 		lda #$01   ;this is how to tell the VICII to generate a raster interrupt
 		sta $d01a
 
-		lda #$f0   ;this is how to tell at which rasterline we want the irq to be triggered
+		lda #$ff   ;this is how to tell at which rasterline we want the irq to be triggered
 		sta $d012
 
 		lda #$1b   ;as there are more than 256 rasterlines, the topmost bit of $d011 serves as
