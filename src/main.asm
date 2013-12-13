@@ -3,8 +3,8 @@
 ; by Raf/Vulture Design
 ;
 
-*= $0400
-.incprg "..\gfx\knation-0400.PRG"
+;*= $0400
+;.incprg "..\gfx\knation-0400.PRG"
 *= $0800
 .incprg "..\gfx\knation-d800.prg"
 *= $2000
@@ -18,6 +18,8 @@
 .include "kbd.asm"
 .include "systemsetup.asm"
 .include "showpic.asm"
+.include "packedlen.asm"
+.include "computeloadaddr.asm"
 
 *= $8000	
 .incprg "..\dload\user_cfg\dload.prg" 

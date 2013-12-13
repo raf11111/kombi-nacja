@@ -11,12 +11,13 @@ mainstart
 		sei
 		jsr DreamLoad
         bcc dloadok 	          ;success?
-        lda #<DreamLoadErr          ;error message
-        ldy #>DreamLoadErr
-        jsr $ab1e
-		jmp *
+        ;lda #<DreamLoadErr          ;error message
+        ;ldy #>DreamLoadErr
+		
+        ;jsr $ab1e
+		jmp *-3
 
-dloadok	lda #$0c
+dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 		sta $d021
 		
 		jsr systemSetup
@@ -26,16 +27,16 @@ dloadok	lda #$0c
 		
 		jsr setupkbd		
 		
-		;lda #$37 ; TODO zmiana konfigu wypierdala obsluge klawiatury : czemu???
+		;lda #$37 ; TODO zmiana konfigu wypierdala obsluge kbd : czemu???
 		;sta $01
 
-		jsr ShowPic
+		;jsr ShowPic
 	
+		lda msx1 ; TODO debug only
+		sta $0400+40
 	
-        lda #msx1_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow
-        ldx #<msx1
-        ldy #>msx1
-        jsr loadfile 	
+		jsr loadTune
+
 	
 ;; load from mem debug
 ;depack 
@@ -47,48 +48,72 @@ dloadok	lda #$0c
 
 
 ;depack 
-		lda #<$4857
-		sta opbase + 1
-		lda #>$4857
-		sta opbase + 2
+		jsr computeloadaddr
+
+		;lda #<$4857
+		;sta opbase + 1
+		;lda #>$4857
+		;sta opbase + 2
+		
+		inc $d020
 		
 		jsr exod_decrunch
+
+		inc $d020		
 
 		lda #<musicirq  ;this is how we set up
 		sta $fffe  ;the address of our interrupt code
 		lda #>musicirq
-		sta $ffff		
+		sta $ffff	
 
-musstart		lda #$00
+		jsr musstart
+
+		;;; TODO: przenies obsluge klawiatury z main loop do IRQ
+
+		
+
+checkkbd:
+		jsr keyscan
+		lda $11 ;actkey
+		cmp #$ff	;$ff= no key pressed
+		beq checkkbd
+
+		cmp #$40	;convert to screen codes
+		bmi checkkbd2
+		sec
+		sbc #$40
+
+		cmp #$D ; 'M' character
+		beq loadAndInitTune		
+		
+checkkbd2:
+		sta $0400
+		sta msx1
+	
+		jmp checkkbd		
+
+loadAndInitTune:
+		jsr computeloadaddr
+		jsr loadTune
+		jsr musstart
+		jmp checkkbd
+		
+loadTune:
+		sei
+        lda #msx1_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow
+        ldx #<msx1
+        ldy #>msx1		
+		jsr loadfile 
+		rts
+
+musstart:
+		lda #$00
 		tax
 		tay 
 		jsr $1000
 
 		cli
-
-uu2:	jsr keyscan
-		lda $11 ;actkey
-		cmp #$ff	;$ff= no key pressed
-		beq uu2
-
-		cmp #$D ; 'M' character
-		beq loadTune
-		
-		cmp #$40	;convert to screen codes
-		bmi ok2
-		sec
-		sbc #$40
-ok2:
-		sta $0400
-		sta msx1
-	
-x22:	jmp uu2
-		
-;;;
-loadTune:
-		sei
-		jsr loadfile
-		jmp musstart
+		rts
 		
 ;;;;;;;;;;;;;;;;;;;;
 
@@ -114,10 +139,6 @@ irqend: exitIRQ
 		
 msx1 	.scru "1*"
 msx1_len = * - msx1
-
-DreamLoadErr
-.scru "error installing dreamload!"
-.byte 13, 0
 		
-
-		
+actualTune:
+.byte $00		
