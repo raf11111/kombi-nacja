@@ -12,10 +12,9 @@ checkkbd:
 		cmp #$1A ; 'z' key
 		bne checkkbd2
 
-		cmp #'Z
-		
 		lda #OPLoadTune
 		sta OPFLAG
+		jmp checkkbd
 		
 checkkbd2:
 		sta $0400
