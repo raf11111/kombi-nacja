@@ -89,20 +89,7 @@ x1:	sta table,x
 	sta table+%11101110
 
 	rts
-	;endless dummy 
-	; TEST CODE
-uu:	jsr keyscan
-	lda actkey
-	cmp #$ff	;$ff= no key pressed
-	beq x2
-	cmp #$40	;convert to screen codes
-	bmi ok
-	sec
-	sbc #$40
-ok:
-	sta $0400
-x2:	jmp uu
-	
+
 keyscan:
 	lda #%11111110
 	sta mask

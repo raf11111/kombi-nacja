@@ -2,7 +2,20 @@
 ; load from memory debug
 ;*=$1000
 ;.incprg "..\packmsx\1.prg"
-;msx1end .byte 0
+;musicNameend .byte 0
+
+;; load from mem debug
+;depack 
+;		lda #<musicNameend
+;		sta opbase + 1
+;		lda #>musicNameend
+;		sta opbase + 2
+;;
+
+		;lda #<$4857
+		;sta opbase + 1
+		;lda #>$4857
+		;sta opbase + 2
 
 *= $7000
 mainstart
@@ -15,6 +28,7 @@ mainstart
         ;ldy #>DreamLoadErr
 		
         ;jsr $ab1e
+		inc $d020
 		jmp *-3
 
 dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
@@ -32,34 +46,9 @@ dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 
 		;jsr ShowPic
 	
-		lda msx1 ; TODO debug only
-		sta $0400+40
-	
 		jsr loadTune
-
-	
-;; load from mem debug
-;depack 
-;		lda #<msx1end
-;		sta opbase + 1
-;		lda #>msx1end
-;		sta opbase + 2
-;;
-
-
-;depack 
 		jsr computeloadaddr
-
-		;lda #<$4857
-		;sta opbase + 1
-		;lda #>$4857
-		;sta opbase + 2
-		
-		inc $d020
-		
 		jsr exod_decrunch
-
-		inc $d020		
 
 		lda #<musicirq  ;this is how we set up
 		sta $fffe  ;the address of our interrupt code
@@ -67,42 +56,24 @@ dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 		sta $ffff	
 
 		jsr musstart
-
-		;;; TODO: przenies obsluge klawiatury z main loop do IRQ
-
 		
-
-checkkbd:
-		jsr keyscan
-		lda $11 ;actkey
-		cmp #$ff	;$ff= no key pressed
-		beq checkkbd
-
-		cmp #$40	;convert to screen codes
-		bmi checkkbd2
-		sec
-		sbc #$40
-
-		cmp #$D ; 'M' character
-		beq loadAndInitTune		
-		
-checkkbd2:
-		sta $0400
-		sta msx1
-	
-		jmp checkkbd		
-
-loadAndInitTune:
-		jsr computeloadaddr
+checkflag:
+		lda OPFLAG
+		cmp #OPLoadTune
+		bne checkflag
+		cli
 		jsr loadTune
+		jsr computeloadaddr
+		jsr exod_decrunch
 		jsr musstart
-		jmp checkkbd
-		
+		clearflag
+		jmp checkflag
+
 loadTune:
 		sei
-        lda #msx1_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow
-        ldx #<msx1
-        ldy #>msx1		
+        lda #musicName_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow
+        ldx #<musicName
+        ldy #>musicName		
 		jsr loadfile 
 		rts
 
@@ -124,10 +95,15 @@ musicirq:
 		lda #$ff   ;this is the orthodox and safe way of clearing the interrupt condition of the VICII.
 		sta $d019  ;if you don't do this the interrupt condition will be present all the time and you end
 			   ;up having the CPU running the interrupt code all the time
-
 musplay:
 		inc $d020
+		lda tunePlaying
+		beq notPlaying
 		jsr $1003
+notPlaying:
+		inc $d020
+.include "kbdirq.asm"
+		dec $d020
 		dec $d020
 		
 irqend: exitIRQ
@@ -137,8 +113,14 @@ irqend: exitIRQ
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		
-msx1 	.scru "1*"
-msx1_len = * - msx1
-		
+musicName 	.scru "5"
+musicName_len = * - musicName
+
+tunePlaying
+.byte $01		
 actualTune:
-.byte $00		
+.byte $04	
+tuneToLoad:
+.byte $00
+OPFLAG: ; operation flag
+.byte $00	

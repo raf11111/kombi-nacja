@@ -15,3 +15,5 @@ shutup = iloader+6
 wakeup = iloader+9
 ledoff = iloader+12
 speederoff = iloader+15
+
+OPLoadTune = 1

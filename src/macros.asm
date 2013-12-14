@@ -35,3 +35,9 @@ pla
 		tax        ;restore register X from stack
 		pla        ;restore register A from stack
 ENDM
+
+MAC clearflag
+		lda #$0
+		sta OPFLAG
+ENDM
+		
