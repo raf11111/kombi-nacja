@@ -1,21 +1,40 @@
 
+; obsluga
+; f1 re-play
+; f3 stop
+; return load + play
+; cursory -1 / + 1
+; spacja - pokaz tekst
 
-*= $0400 + 500
+*= $0400 + 14 * 40
 
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
-.scru "test test test test test test test test"
+
+;     "                    "
+songpos .scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+.scru "01) a song          "
+
 
 *= $0900
 
 	sei
 
-	jsr systemSetup
+	;jsr systemSetup
 	lda #$0
 	sta $d020
 	sta $d021
@@ -31,6 +50,8 @@ xxx		lda #$20
 		sta $db00,x
 		inx
 		bne xxx	
+	
+		jsr odwroc
 	
 _a:		lda $d012
 		cmp #$20
@@ -58,7 +79,18 @@ _b:		lda $d012
 		sta $d018	
 		
 		
-		jmp xxx ; *
+		jmp _a
+		
+		
+odwroc:
+		ldy #19
+od1		lda songpos,y
+		eor #128
+		sta songpos,y
+		dey
+		bpl od1
+		rts
+		
 		.include "macros.asm"
 .include "systemsetup.asm"
 		
