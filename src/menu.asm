@@ -8,9 +8,9 @@
 
 *= $0400 + 14 * 40
 
-
 ;     "                    "
-songpos .scru "01) a song          "
+songpos 
+.scru "01) a song          "
 .scru "01) a song          "
 .scru "01) a song          "
 .scru "01) a song          "

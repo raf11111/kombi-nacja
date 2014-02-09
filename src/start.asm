@@ -50,8 +50,8 @@ dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 		jsr computeloadaddr
 		jsr exod_decrunch
 
-		lda #<musicirq  ;this is how we set up
-		sta $fffe  ;the address of our interrupt code
+		lda #<musicirq  
+		sta $fffe  
 		lda #>musicirq
 		sta $ffff	
 
@@ -71,11 +71,22 @@ checkflag:
 
 loadTune:
 		sei
+		lda tuneToLoad
+		clc
+		adc #0;"B"
+		sta musicName
+		
         lda #musicName_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow
         ldx #<musicName
         ldy #>musicName		
 		jsr loadfile 
+		bcs loadError
 		rts
+		
+loadError:
+		inc $d020
+		dec $d020
+		jmp loadError
 
 musstart:
 		lda #$00
@@ -113,13 +124,13 @@ irqend: exitIRQ
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		
-musicName 	.scru "5"
+musicName 	.scru "A"
 musicName_len = * - musicName
 
 tunePlaying
 .byte $01		
-actualTune:
-.byte $04	
+;actualTune:
+;.byte $00	
 tuneToLoad:
 .byte $00
 OPFLAG: ; operation flag
