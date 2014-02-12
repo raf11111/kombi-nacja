@@ -34,46 +34,67 @@ mainstart
 dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 		sta $d021
 		
+		lda #0				;Initialize $dd00
+		sta $dd00
+	
 		jsr systemSetup
 		
-		;lda #$35
-		;sta $01
+		lda #$35
+		sta $01
 		
-		jsr setupkbd		
-		
-		;lda #$37 ; TODO zmiana konfigu wypierdala obsluge kbd : czemu???
-		;sta $01
-
 		;jsr ShowPic
-	
+
+; set up default colors
+SUBROUTINE defaultColors
+		ldx #$00
+		lda #$21
+.xxx		sta $d800,x
+		sta $d900,x
+		sta $da00,x
+		sta $db00,x
+		
+		sta $c000,x
+		sta $c100,x
+		
+		inx
+		bne .xxx	
+SUBROUTINE dfskgjdjfhgjsdfgh
+;
+		inc $d020
 		jsr loadTune
+		inc $d020		
 		jsr computeloadaddr
+		inc $d020		
 		jsr exod_decrunch
+		inc $d020		
 
-		lda #<musicirq  
-		sta $fffe  
-		lda #>musicirq
-		sta $ffff	
-
+		setIRQ logoirq
+		
 		jsr musstart
 		
 checkflag:
 		lda OPFLAG
+		cmp #OPWaitingForAction
+		beq checkflag
 		cmp #OPLoadTune
-		bne checkflag
+		bne checkflag ; last action on list = bne
 		cli
+
+		lda #0
+		sta $d418 
+
 		jsr loadTune
 		jsr computeloadaddr
 		jsr exod_decrunch
 		jsr musstart
-		clearflag
+		OPclearflag
 		jmp checkflag
 
 loadTune:
 		sei
 		lda tuneToLoad
 		clc
-		adc #0;"B"
+		adc #"A"
 		sta musicName
 		
         lda #musicName_len               ;filename as argument  ; TODO zmien na jakis bufor czy cus w ktorym beda trzymane nazwy kawalkow
@@ -99,13 +120,53 @@ musstart:
 		
 ;;;;;;;;;;;;;;;;;;;;
 
+logoirq:
+		inc $d020
+		enterIRQ
+		clearVicIRQ 
+		
+		lda #$3b
+		sta $d011
+		
+		lda #$0f  ; bitmap at $2000
+		sta $d018
+		
+		lda #$08
+		sta $d016		
+
+		setIRQ menuirq
+		lda #152
+		sta $d012
+		
+		exitIRQ
+		dec $d020
+		rti
+
+menuirq:
+		inc $d020
+		enterIRQ
+		clearVicIRQ 
+		
+		lda #$1b
+		sta $d011
+		
+		lda #$02 ; textscreen @ 0, charrom @ $0800
+		sta $d018 
+		
+		setIRQ musicirq
+		lda #255
+		sta $d012		
+		
+		exitIRQ
+		dec $d020
+		rti		
+		
 musicirq:
 		inc $d020
 		enterIRQ
 
-		lda #$ff   ;this is the orthodox and safe way of clearing the interrupt condition of the VICII.
-		sta $d019  ;if you don't do this the interrupt condition will be present all the time and you end
-			   ;up having the CPU running the interrupt code all the time
+		clearVicIRQ
+			   
 musplay:
 		inc $d020
 		lda tunePlaying
@@ -113,9 +174,13 @@ musplay:
 		jsr $1003
 notPlaying:
 		inc $d020
-.include "kbdirq.asm"
+		jsr checkkbd
 		dec $d020
 		dec $d020
+		
+		setIRQ logoirq
+		lda #32
+		sta $d012		
 		
 irqend: exitIRQ
 
@@ -124,7 +189,7 @@ irqend: exitIRQ
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		
-musicName 	.scru "A"
+musicName 	.scru "A.*"
 musicName_len = * - musicName
 
 tunePlaying

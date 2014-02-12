@@ -36,8 +36,37 @@ pla
 		pla        ;restore register A from stack
 ENDM
 
-MAC clearflag
-		lda #$0
+MAC OPclearflag
+		lda #$0 ; OPWaitingForAction
 		sta OPFLAG
 ENDM
 		
+MAC clearVicIRQ
+		lda #$ff   ; clear IRQ
+		sta $d019 
+ENDM	
+
+MAC setIRQ 
+		lda #<{0}
+		sta $fffe  
+		lda #>{0}
+		sta $ffff
+ENDM	
+
+MAC	setVicBank
+	pha
+	lda #{1}
+	eor #3
+	and $dd00
+	sta $dd00
+	pla
+ENDM
+
+MAC	setVicBankDLOAD
+	;pha
+    lda #($3f ^ {1})      ;the new substitute for setting the vic
+    sta $dd02               ;bank to %xy
+	;pla
+ENDM
+
+

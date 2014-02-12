@@ -16,4 +16,8 @@ wakeup = iloader+9
 ledoff = iloader+12
 speederoff = iloader+15
 
+OPWaitingForAction = 0
 OPLoadTune = 1
+
+NUMBER_OF_TUNES = 11 -1
+
