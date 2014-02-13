@@ -15,8 +15,6 @@
 .include "globallabels.asm"
 
 .include "start.asm"
-;.include "kbd.asm"
-;.include "minikey.asm"
 .include "systemsetup.asm"
 .include "showpic.asm"
 .include "packedlen.asm"
@@ -29,29 +27,23 @@
 exom ALIGN 255,0
 .include "exomizer.asm"
 
-*= $c000 + 14 * 40
+*= $c000
+	REPEAT 7 ;14*40 / 2
+		REPEAT 20
+			BYTE $21, $12
+		REPEND
+		REPEAT 20
+			BYTE $12, $21
+		REPEND
+	REPEND
 
-;     "                    "
-songpos 
-.scru "slodkiego milego zyc"
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
+scru "ja pierdole to juz prawie koniec. zeby dzialac z kolekcja uzywac kursorow oraz return. zuo i wuj."
 
+repeat 500
+		byte 32
+repend
+	
+	
 *= $c800
 .incprg "..\gfx\Font.prg", $c800
 

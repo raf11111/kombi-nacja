@@ -53,20 +53,20 @@ SUBROUTINE defaultColors
 		sta $da00,x
 		sta $db00,x
 		
-		sta $c000,x
-		sta $c100,x
+;		sta $c000,x
+;		sta $c100,x
 		
 		inx
 		bne .xxx	
 SUBROUTINE dfskgjdjfhgjsdfgh
 ;
-		inc $d020
+;		inc $d020
 		jsr loadTune
-		inc $d020		
+;		inc $d020		
 		jsr computeloadaddr
-		inc $d020		
+;		inc $d020		
 		jsr exod_decrunch
-		inc $d020		
+;		inc $d020		
 
 		setIRQ logoirq
 		
@@ -78,20 +78,24 @@ checkflag:
 		beq checkflag
 		cmp #OPLoadTune
 		bne checkflag ; last action on list = bne
+
 		cli
-
-		lda #0
-		sta $d418 
-
 		jsr loadTune
 		jsr computeloadaddr
+		
+		lda #0
+		sta tunePlaying		
+
+		lda #0
+		sta $d418
+		
 		jsr exod_decrunch
 		jsr musstart
 		OPclearflag
 		jmp checkflag
 
 loadTune:
-		sei
+		;sei
 		lda tuneToLoad
 		clc
 		adc #"A"
@@ -110,6 +114,8 @@ loadError:
 		jmp loadError
 
 musstart:
+		lda #1
+		sta tunePlaying
 		lda #$00
 		tax
 		tay 
@@ -121,7 +127,7 @@ musstart:
 ;;;;;;;;;;;;;;;;;;;;
 
 logoirq:
-		inc $d020
+;		inc $d020
 		enterIRQ
 		clearVicIRQ 
 		
@@ -135,15 +141,15 @@ logoirq:
 		sta $d016		
 
 		setIRQ menuirq
-		lda #152
+		lda #152+3
 		sta $d012
 		
 		exitIRQ
-		dec $d020
+;		dec $d020
 		rti
 
 menuirq:
-		inc $d020
+;		inc $d020
 		enterIRQ
 		clearVicIRQ 
 		
@@ -158,11 +164,11 @@ menuirq:
 		sta $d012		
 		
 		exitIRQ
-		dec $d020
+;		dec $d020
 		rti		
 		
 musicirq:
-		inc $d020
+;		inc $d020
 		enterIRQ
 
 		clearVicIRQ
@@ -173,10 +179,10 @@ musplay:
 		beq notPlaying
 		jsr $1003
 notPlaying:
-		inc $d020
+;		inc $d020
 		jsr checkkbd
 		dec $d020
-		dec $d020
+;		dec $d020
 		
 		setIRQ logoirq
 		lda #32
@@ -184,7 +190,7 @@ notPlaying:
 		
 irqend: exitIRQ
 
-		dec $d020
+;		dec $d020
 		rti		
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

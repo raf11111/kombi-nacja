@@ -69,4 +69,15 @@ MAC	setVicBankDLOAD
 	;pla
 ENDM
 
+MAC incw
+	lda {1}
+	clc
+	adc #1
+	sta {1}
+	bcc .a
+	inc {1}+1
+.a	nop
+ENDM
+	
+
 
