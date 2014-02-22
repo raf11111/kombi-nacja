@@ -144,6 +144,8 @@ logoirq:
 		lda #152+3
 		sta $d012
 		
+		jsr checkkbd		
+		
 		exitIRQ
 ;		dec $d020
 		rti
@@ -179,10 +181,7 @@ musplay:
 		beq notPlaying
 		jsr $1003
 notPlaying:
-;		inc $d020
-		jsr checkkbd
 		dec $d020
-;		dec $d020
 		
 		setIRQ logoirq
 		lda #32

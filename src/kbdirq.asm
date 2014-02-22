@@ -37,6 +37,9 @@ __f1    cmp #$fb
 		ldx tuneToLoad
 		beq *+3
 		dec tuneToLoad
+		inc $d020
+		jsr moveScreenUp
+		dec $d020
 		rts
 		
 __f3	cmp #$7f
@@ -45,6 +48,9 @@ __f3	cmp #$7f
 		cpx #NUMBER_OF_TUNES
 		bpl *+3
 		inc tuneToLoad
+		inc $d020
+		jsr moveScreenDown
+		dec $d020
 		rts
 		
 __f5	cmp #$fd

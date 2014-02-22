@@ -27,21 +27,36 @@
 exom ALIGN 255,0
 .include "exomizer.asm"
 
+.include "menuitems.asm"
+
 *= $c000
-	REPEAT 7 ;14*40 / 2
-		REPEAT 20
-			BYTE $21, $12
-		REPEND
-		REPEAT 20
-			BYTE $12, $21
-		REPEND
+;; checkerboard
+;	REPEAT 7 ;14*40 / 2
+;		REPEAT 20
+;			BYTE $21, $12
+;		REPEND
+;		REPEAT 20
+;			BYTE $12, $21
+;		REPEND
+;	REPEND
+
+	REPEAT 14*40
+		byte $20
 	REPEND
 
-scru "ja pierdole to juz prawie koniec. zeby dzialac z kolekcja uzywac kursorow oraz return. zuo i wuj."
+.scru "1*                                      "
+.scru "2*                                      "
+.scru "3*                                      "
+.scru "4*                                      "
+.scru "5*                                      "
+.scru "1                                       "
+.scru "2                                       "
+.scru "3                                       "
+.scru "4                                       "
 
-repeat 500
-		byte 32
-repend
+;repeat 200
+;		byte 1,2,3
+;repend
 	
 	
 *= $c800
