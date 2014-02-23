@@ -2,26 +2,26 @@
 
 menuItems:
        .
-.scru "1*         a                            "
-.scru "2*         b                            "
-.scru "3*         c                            "
-.scru "4*         f                            "
-.scru "5*         g                            "
-.scru "1aaaaa                                  "
-.scru "2  bbbbbbbbbbbbb                        "
-.scru "3   cccccccccccc                        "
-.scru "4  dddddddddddd                         "
-.scru "5   eeeeeeeeeeee                        "
-.scru "1   fffffffff                           "
-.scru "2    ggggggggggg                        "
-.scru "3       hhhhhhhhhhhh                    "
-.scru "4    iiiiiiiiii                         "
-.scru "5          jjjjjjjjj                    "
-.scru "1*                                      "
-.scru "2*                                      "
-.scru "3*                                      "
-.scru "4*                                      "
-.scru "5*                                      "
+.scru "00         a                            "
+.scru "01         b                            "
+.scru "02         c                            "
+.scru "03         f                            "
+.scru "04         g                            "
+.scru "05aaaa                                  "
+.scru "06 bbbbbbbbbbbbb                        "
+.scru "07  cccccccccccc                        "
+.scru "08 dddddddddddd                         "
+.scru "09  eeeeeeeeeeee                        "
+.scru "10  fffffffff                           "
+.scru "11   ggggggggggg                        "
+.scru "12      hhhhhhhhhhhh                    "
+.scru "13   iiiiiiiiii                         "
+.scru "14         jjjjjjjjj                    "
+.scru "15                                      "
+.scru "16                                      "
+.scru "17                                      "
+.scru "17                                      "
+.scru "19                                      "
 
 menuShowTuneToLoad:
 ; wyswietlic linie: 5 w gore od obecnej pozycji
@@ -58,6 +58,8 @@ moveScreenDown:
 SUBROUTINE multiply40 ; TODO: works for numbers up to 25	
 	
 mul40
+	lda #0
+	sta mul40hi
 	lda tuneToLoad
 	sta mul40lo
 	ASL

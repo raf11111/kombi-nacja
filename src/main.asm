@@ -5,10 +5,10 @@
 
 ;*= $0400
 ;.incprg "..\gfx\knation-0400.PRG"
-*= $0800
-.incprg "..\gfx\knation-d800.prg"
-*= $2000
-.incprg "..\gfx\knation-2000.prg"
+;*= $0800
+;.incprg "..\gfx\knation-d800.prg"
+;*= $2000
+;.incprg "..\gfx\knation-2000.prg"
 
 
 .include "macros.asm"
@@ -44,15 +44,15 @@ exom ALIGN 255,0
 		byte $20
 	REPEND
 
-.scru "1*                                      "
-.scru "2*                                      "
-.scru "3*                                      "
-.scru "4*                                      "
-.scru "5*                                      "
-.scru "1                                       "
-.scru "2                                       "
-.scru "3                                       "
-.scru "4                                       "
+;.scru "1*                                      "
+;.scru "2*                                      "
+;.scru "3*                                      "
+;.scru "4*                                      "
+;.scru "5*                                      "
+;.scru "1                                       "
+;.scru "2                                       "
+;.scru "3                                       "
+;.scru "4                                       "
 
 ;repeat 200
 ;		byte 1,2,3

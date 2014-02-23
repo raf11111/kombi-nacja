@@ -6,30 +6,6 @@
 ; cursory -1 / + 1
 ; spacja - pokaz tekst
 
-*= $0400 + 14 * 40
-
-;     "                    "
-songpos 
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-.scru "01) a song          "
-
-
 *= $0900
 
 	sei
