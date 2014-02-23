@@ -20,6 +20,7 @@
 .include "packedlen.asm"
 .include "computeloadaddr.asm"
 .include "kbdirq.asm"
+.include "jukeboxtimer.asm"
 
 *= $8000	
 .incprg "..\dload\user_cfg\dload.prg" 

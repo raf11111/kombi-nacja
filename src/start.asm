@@ -123,6 +123,12 @@ loadError:
 		jmp loadError
 
 musstart:
+		jsr resetTimer
+
+		lda #0
+		ldy #2 
+		jsr setTimerTuneLengthAY ; a=0, y=2 gives 512 frames
+		
 		lda #1
 		sta tunePlaying
 		lda #$00
@@ -154,6 +160,17 @@ logoirq:
 		sta $d012
 		
 		jsr checkkbd		
+		
+		jsr incTimer
+		jsr checkTimer
+		
+		;DEBUG
+		lda musicTimerLo
+		sta $c000+13*40 + 3
+
+		lda musicTimerHi
+		sta $c000+13*40 + 4
+		;
 		
 		exitIRQ
 ;		dec $d020
@@ -213,4 +230,4 @@ tunePlaying
 tuneToLoad:
 .byte $00
 OPFLAG: ; operation flag
-.byte $00	
+.byte $00
