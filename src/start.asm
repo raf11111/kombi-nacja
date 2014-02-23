@@ -58,6 +58,15 @@ SUBROUTINE defaultColors
 		
 		inx
 		bne .xxx	
+		
+SUBROUTINE aaaa		
+		; menu selection bar 
+		ldy #39
+		lda #$04
+.xx1	sta $d800 + 18 * 40, y
+		dey
+		bpl .xx1		
+		
 SUBROUTINE dfskgjdjfhgjsdfgh
 ;
 ;		inc $d020
