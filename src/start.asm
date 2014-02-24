@@ -63,7 +63,7 @@ SUBROUTINE aaaa
 		; menu selection bar 
 		ldy #39
 		lda #$04
-.xx1	sta $d800 + 18 * 40, y
+.xx1	sta $d800 + 20 * 40, y
 		dey
 		bpl .xx1		
 		

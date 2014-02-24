@@ -41,12 +41,15 @@ __f1    cmp #$fb
 		beq __f3
 		dec tuneToLoad
 		inc $d020
-		jsr moveScreenUp
+		jsr moveScreenDown
 		
-		lda #<($c000 + 24*40)
+		lda #<($c000 + 16*40)
 		sta .dstLn + 1
-		lda #>($c000 + 24*40)
+		lda #>($c000 + 16*40)
 		sta .dstLn + 2
+		lda tuneToLoad
+		clc
+		adc #0
 		jsr printNewSong
 				
 		dec $d020
@@ -60,12 +63,15 @@ __f3	cmp #$7f
 		bpl __f5
 		inc tuneToLoad
 		inc $d020
-		jsr moveScreenDown
+		jsr moveScreenUp
 
-		lda #<($c000 + 16*40)
+		lda #<($c000 + 24*40)
 		sta .dstLn + 1
-		lda #>($c000 + 16*40)
+		lda #>($c000 + 24*40)
 		sta .dstLn + 2
+		lda tuneToLoad
+		clc
+		adc #8
 		jsr printNewSong
 
 		dec $d020
@@ -99,4 +105,4 @@ printNewSong:
 		dey
 		bpl .srcChr
 
-		rts
+		rts	

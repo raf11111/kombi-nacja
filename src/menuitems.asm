@@ -1,7 +1,18 @@
 ;menuitems.asm
 
+;algo dla zwiekszenia utworu
+;przenies ekran od powiedzmy 17 linii do 24 (indeks od 0) w gore
+;napisz nowa linie (aktualna muzyka + 9?) w ostatniej linii
+
+
 menuItems:
        .
+.scru "--                                      "
+.scru "--                                      "
+.scru "--                                      "
+.scru "--                                      "
+.scru "--                                      "	   
+	   
 .scru "00         a                            "
 .scru "01         b                            "
 .scru "02         c                            "
@@ -36,8 +47,8 @@ multiplyTemp
 	
 moveScreenUp:
 	; from 16th line of text screen
-	CHAR SET $c000 + 16 * 40
-	REPEAT 9 * 40 
+	CHAR SET $c000 + 17 * 40
+	REPEAT 8 * 40 
 		lda CHAR
 		sta CHAR - 40
 		CHAR SET CHAR + 1
@@ -58,9 +69,14 @@ moveScreenDown:
 SUBROUTINE multiply40 ; TODO: works for numbers up to 25	
 	
 mul40
+	tax
 	lda #0
 	sta mul40hi
-	lda tuneToLoad
+	;	lda tuneToLoad
+	txa
+;	clc
+;	adc #8
+	;tya
 	sta mul40lo
 	ASL
 	ASL
@@ -81,5 +97,3 @@ mul40hi:
 mul40lo:
 	byte 10
 
-
-	
