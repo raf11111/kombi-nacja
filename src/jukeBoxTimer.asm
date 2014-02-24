@@ -14,9 +14,9 @@ checkTimer
 	bne .skip2
 	
 	; TIMER HIT 
-	inc tuneToLoad ; TODO find a smarter way to switch the tune - this is ugly hack
-	lda #OPLoadTune
-	sta OPFLAG
+	;inc tuneToLoad ; TODO find a smarter way to switch the tune - this is ugly hack
+	;lda #OPLoadTune
+	;sta OPFLAG
 	
 .skip2
 	rts
