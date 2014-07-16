@@ -49,7 +49,7 @@ __f1    cmp #$fb
 		sta .dstLn + 2
 		lda tuneToLoad
 		clc
-		adc #0
+		adc #0 +5
 		jsr printNewSong
 				
 		dec $d020
@@ -71,7 +71,7 @@ __f3	cmp #$7f
 		sta .dstLn + 2
 		lda tuneToLoad
 		clc
-		adc #8
+		adc #8 +5
 		jsr printNewSong
 
 		dec $d020

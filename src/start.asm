@@ -44,6 +44,8 @@ dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 		
 		;jsr ShowPic
 
+		jsr scrollsetup
+		
 ; set up default colors
 SUBROUTINE defaultColors
 		ldx #$00
@@ -155,21 +157,23 @@ logoirq:
 		lda #$08
 		sta $d016		
 
-		setIRQ menuirq
+		setIRQ scrollirq ; menuirq ;scrollirq
 		lda #152+3
 		sta $d012
 		
 		jsr checkkbd		
 		
 		jsr incTimer
+		lda jukeBoxEnabled
+		beq noJukeBox
 		jsr checkTimer
-		
+noJukeBox:		
 		;DEBUG
-		lda musicTimerLo
-		sta $c000+13*40 + 3
+		;lda musicTimerLo
+		;sta $c000+13*40 + 3
 
-		lda musicTimerHi
-		sta $c000+13*40 + 4
+		;lda musicTimerHi
+		;sta $c000+13*40 + 4
 		;
 		
 		exitIRQ
@@ -181,11 +185,17 @@ menuirq:
 		enterIRQ
 		clearVicIRQ 
 		
+		;;;
 		lda #$1b
 		sta $d011
 		
 		lda #$02 ; textscreen @ 0, charrom @ $0800
 		sta $d018 
+		
+		;   no scroll
+		lda #1+2+4+8
+		sta $d016
+		;;;
 		
 		setIRQ musicirq
 		lda #255
@@ -218,6 +228,83 @@ irqend: exitIRQ
 ;		dec $d020
 		rti		
 
+SUBROUTINE scroller
+;taken from my code from yay.. 2004!
+
+skrol .byte $08 ; 1+2+4 + 1 additional - wartosc do $d016
+
+scrollirq 
+		enterIRQ
+		
+		clearVicIRQ
+		
+		inc $d020
+	
+		; textmode
+		lda #$1b
+		sta $d011
+		
+		lda #$02 ; textscreen @ 0, charrom @ $0800
+		sta $d018 
+		;
+	
+	lda skrol
+	sta $d016
+
+;	lda skrol
+;	and #(255-(255-1-2-4))
+
+;   no scroll
+;	lda #1+2+4+8
+;	sta $d016
+
+;	and #(255-(255-1-2-4))
+	dec skrol
+	bne dalejs
+	lda #1+2+4
+	sta skrol
+
+; scroller starts at 14 textline (0 index based)
+	
+	inc scrollPtr + 1
+	bne .hop
+
+	inc scrollPtr + 2
+	
+.hop	ldx #00
+	
+scrlup	
+	lda $c000+14*40+1,x
+	sta $c000+14*40,x
+		
+	inx
+	cpx #39
+	bne scrlup
+	
+	ldy #$00
+scrollPtr:
+	lda $1234
+	bne walwekran
+	jsr scrollsetup
+	jmp dalejs
+walwekran 	
+	sta $c000+14*40+39
+
+dalejs 	
+		setIRQ menuirq
+		lda #172+3
+		sta $d012
+	
+		dec $d020
+		exitIRQ	
+		rti
+
+scrollsetup	 lda #<stext
+	ldx #>stext
+	sta scrollPtr + 1
+	stx scrollPtr + 2
+	rts
+	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 		
 musicName 	.scru "A.*"
@@ -231,3 +318,10 @@ tuneToLoad:
 .byte $00
 OPFLAG: ; operation flag
 .byte $00
+jukeBoxEnabled:
+.byte $00
+
+
+stext
+.scru "                                           hello biatches, it's vulture design in 2014. it's raf's last release for c64!"
+byte 0
