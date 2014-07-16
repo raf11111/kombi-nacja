@@ -176,6 +176,8 @@ noJukeBox:
 		;sta $c000+13*40 + 4
 		;
 		
+		jsr doScroll
+		
 		exitIRQ
 ;		dec $d020
 		rti
@@ -259,13 +261,25 @@ scrollirq
 ;	sta $d016
 
 ;	and #(255-(255-1-2-4))
+
+	setIRQ menuirq
+	lda #172+3
+	sta $d012
+
+	dec $d020
+	exitIRQ	
+	rti	
+
+exitScroll:	
+	rts
+	
+doScroll:
 	dec skrol
-	bne dalejs
+	bne exitScroll
 	lda #1+2+4
 	sta skrol
 
 ; scroller starts at 14 textline (0 index based)
-	
 	inc scrollPtr + 1
 	bne .hop
 
@@ -291,13 +305,7 @@ walwekran
 	sta $c000+14*40+39
 
 dalejs 	
-		setIRQ menuirq
-		lda #172+3
-		sta $d012
-	
-		dec $d020
-		exitIRQ	
-		rti
+	rts
 
 scrollsetup	 lda #<stext
 	ldx #>stext
