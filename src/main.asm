@@ -15,9 +15,11 @@
 .include "globallabels.asm"
 
 .include "start.asm"
+.include "scroll.asm"
 .include "systemsetup.asm"
 .include "showpic.asm"
 .include "packedlen.asm"
+.include "musiclen.asm"
 .include "computeloadaddr.asm"
 .include "kbdirq.asm"
 .include "jukeboxtimer.asm"

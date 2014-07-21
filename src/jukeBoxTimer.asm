@@ -14,9 +14,9 @@ checkTimer
 	bne .skip2
 	
 	; TIMER HIT 
-	;inc tuneToLoad ; TODO find a smarter way to switch the tune - this is ugly hack
-	;lda #OPLoadTune
-	;sta OPFLAG
+	inc tuneToLoad ; TODO find a smarter way to switch the tune - this is ugly hack
+	lda #OPLoadTune
+	sta OPFLAG
 	
 .skip2
 	rts
@@ -39,9 +39,20 @@ musicTimerHi
 .byte $00	
 	
 resetTimer
+	pha
+	pya
+	lda tunePlaying
+	asl
+	tay
+	lda tunelen1,y
+	sta musicTimeLo
+	lda tunelen1 + 1,y
+	sta musicTimeHi
 	lda #0
-	sta musicTimer
-	sta musicTimer + 1
+	sta musicTimerLo
+	sta musicTimerHi
+	ply
+	pla
 	rts
 
 ; tune len
