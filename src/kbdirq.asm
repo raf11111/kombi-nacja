@@ -10,6 +10,12 @@ checkkbd:
 ;bf f5
 ;7f up/dn
 
+		lda OPFLAG
+		cmp #OPLoadTune ; skip keyboard check while loading data
+		bne dokbdcheck
+		rts
+
+dokbdcheck:
 		lda #$0
 		sta $dc03	; port b ddr (input)
 		lda #$ff
@@ -25,12 +31,14 @@ checkkbd:
 		cmp #$ff
 		beq ckeckkbdexit
 
-		sta $c000+13*40
+		;; key debug
+		;;sta $c000+13*40
 		jsr checkKeys
 		
 ckeckkbdexit
 		lda tuneToLoad
-		sta $c001+13*40
+		;; key debug
+		;;sta $c001+13*40
 		rts
 
 checkKeys:	
@@ -40,7 +48,7 @@ __f1    cmp #$fb
 		ldx tuneToLoad
 		beq __f3
 		dec tuneToLoad
-		inc $d020
+;;		inc $d020
 		jsr moveScreenDown
 		
 		lda #<($c000 + 16*40)
@@ -52,7 +60,7 @@ __f1    cmp #$fb
 		adc #0 +5
 		jsr printNewSong
 				
-		dec $d020
+;;		dec $d020
 		rts
 
 ;up-dn
@@ -62,7 +70,7 @@ __f3	cmp #$7f
 		cpx #NUMBER_OF_TUNES
 		bpl __f5
 		inc tuneToLoad
-		inc $d020
+;;		inc $d020
 		jsr moveScreenUp
 
 		lda #<($c000 + 24*40)
@@ -74,7 +82,7 @@ __f3	cmp #$7f
 		adc #8 +5
 		jsr printNewSong
 
-		dec $d020
+;;		dec $d020
 		rts
 		
 __f5	cmp #$fd
