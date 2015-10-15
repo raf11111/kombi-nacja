@@ -3,12 +3,14 @@
 ; by Raf/Vulture Design
 ;
 
-;*= $0400
-;.incprg "..\gfx\knation-0400.PRG"
-;*= $0800
-;.incprg "..\gfx\knation-d800.prg"
-;*= $2000
-;.incprg "..\gfx\knation-2000.prg"
+*= $0400
+.incprg "..\gfx\knation-0400.PRG"
+*= $0800
+.incprg "..\gfx\knation-d800.prg"
+*= $1000
+.incprg "..\intromsx\kombi.prg"
+*= $2000
+.incprg "..\gfx\knation-2000.prg"
 
 
 .include "macros.asm"
@@ -33,7 +35,7 @@ exom ALIGN 255,0
 .include "menuitems.asm"
 
 *= $c000
-;; checkerboard
+;; checkerboarded logo
 ;	REPEAT 7 ;14*40 / 2
 ;		REPEAT 20
 ;			BYTE $21, $12
@@ -43,10 +45,24 @@ exom ALIGN 255,0
 ;		REPEND
 ;	REPEND
 
+; red logo
 	REPEAT 14*40
 		byte $20
 	REPEND
 
+;15
+	REPEAT 6*40 ; emty space
+		byte $0
+	REPEND
+
+;21
+.scru " bez ograniczen                 surgeon "
+.scru " black and white                surgeon "
+.scru " black and white               gregfeel "
+.scru " black and white                  djinn "
+.scru " wspomnienia z pleneru          shogoon "
+
+	
 ;.scru "1*                                      "
 ;.scru "2*                                      "
 ;.scru "3*                                      "

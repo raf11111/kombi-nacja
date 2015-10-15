@@ -39,5 +39,17 @@ scrollsetup	 lda #<stext
 	rts
 	
 stext
-.scru "      hello biatches, it's vulture design in 2014. it's raf's last release for c64!"
-byte 0
+.scru "      **** use crsrs and return to play around! **** hello biatches, it's vulture design in 2014... erm 2015! it's probably raf's last coded release for c64! this music collection was meant to be tribute to kombi band mostly because founder, slawomir losowski used c64 as midi sequencer back in 80's"
+
+.scru "       credits... code: raf. graphics: odyn (intro) and raf (collection). font: ? music: surgeon, gregfeel, shogoon, scarlet and mch (intro jingle)   "
+
+.scru " few guys promised us exclusive kombi covers but unfortunately only our long belonging member surgeon made few covers so we had to dig other covers from hvsc to put up"
+.scru " this collection - we hoped someone will still help us, this is why it was delayed for over a year... finally we cut out jukebox and karaoke features which were"
+.scru " thought as partyshakers - unfortunately you have to switch tunes yourself and grab lyrics from another source ;) " 
+.scru " there is also no real intro "
+.scru "because another guy screwed things up - he promised and ran away from us. after all we are really proud because we made it happen -"
+.scru " we can honor kombi's artistic achievement. we wish slawomir losowski all the best"
+.scru " - he is still active musician after all those 40 years!      greetings to www.c64power.com community  "
+
+.scru"                    "
+byte 0   

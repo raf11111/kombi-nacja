@@ -19,6 +19,7 @@
 
 *= $7000
 mainstart
+		setVicScreenDisable
 		lda #$00
 		sta $d020
 		sei
@@ -34,16 +35,18 @@ mainstart
 dloadok	lda #$00   ; TODO tlo do grafy z klawiszem ma byc $0c
 		sta $d021
 		
-		lda #0				;Initialize $dd00
-		sta $dd00
-	
 		jsr systemSetup
 		
 		lda #$35
 		sta $01
 		
-		;jsr ShowPic
-
+		setVicScreenEnable
+		jsr ShowPic
+		setVicScreenDisable		
+		
+		lda #0				;Initialize $dd00
+		sta $dd00		
+		
 		jsr scrollsetup
 		
 ; set up default colors
@@ -78,6 +81,8 @@ SUBROUTINE dfskgjdjfhgjsdfgh
 ;		inc $d020		
 		jsr exod_decrunch
 ;		inc $d020		
+
+		setVicScreenEnable
 
 		setIRQ logoirq
 		
@@ -127,9 +132,9 @@ loadError:
 musstart:
 		jsr resetTimer
 
-		lda #0
-		ldy #2 
-		jsr setTimerTuneLengthAY ; a=0, y=2 gives 512 frames
+		;lda #0
+		;ldy #2 
+		;jsr setTimerTuneLengthAY ; a=0, y=2 gives 512 frames
 		
 		lda #1
 		sta tunePlaying
@@ -214,12 +219,12 @@ musicirq:
 		clearVicIRQ
 			   
 musplay:
-		inc $d020
+;		inc $d020
 		lda tunePlaying
 		beq notPlaying
 		jsr $1003
 notPlaying:
-		dec $d020
+;		dec $d020
 		
 		setIRQ logoirq
 		lda #32
@@ -240,7 +245,7 @@ scrollirq
 		
 		clearVicIRQ
 		
-		inc $d020
+;;		inc $d020
 	
 		; textmode
 		lda #$1b
@@ -266,7 +271,7 @@ scrollirq
 	lda #172+3
 	sta $d012
 
-	dec $d020
+;;	dec $d020
 	exitIRQ	
 	rti	
 

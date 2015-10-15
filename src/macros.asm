@@ -78,6 +78,18 @@ MAC incw
 	inc {1}+1
 .a	nop
 ENDM
-	
 
+MAC setVicScreenDisable
+	lda $d011
+	and #%11101111
+	sta $d011
+ENDM
+	
+MAC setVicScreenEnable
+	lda $d011
+	ora #%00010000
+	sta $d011
+ENDM
+
+	
 

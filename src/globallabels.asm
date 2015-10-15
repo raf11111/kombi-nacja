@@ -7,7 +7,7 @@ DreamLoad = $8000
 
 
 ; TODO sprawdzaj z dload.cfg czy to ejst spojne!
-iloader = $0500 ;$9000
+iloader = $0200 ;$9000
 
 loadfile = iloader
 loadts = iloader+3

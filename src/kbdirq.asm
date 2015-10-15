@@ -106,11 +106,13 @@ printNewSong:
 		clc
 		adc #<menuItems
 		sta .srcChr + 1
-		
+		bcc .dalej
+		inc .srcChr + 2
+.dalej		
 		ldy #39
 .srcChr	lda $0000,y
 .dstLn	sta $0000,y
 		dey
-		bpl .srcChr
+		bne .srcChr
 
 		rts	

@@ -1,5 +1,5 @@
 tunelen1:
-.byte 150, 0 ; 150 sid\out\bez ograniczen.dmc.030.prg
+.byte 150, 0 ; 150 sid\out\bez ograniczen.030.prg
 tunelen2:
 .byte 184, 11 ; 3000 sid\out\BLACK & WHITE.100.prg
 tunelen3:
@@ -15,8 +15,6 @@ tunelen7:
 tunelen8:
 .byte 6, 24 ; 6150 sid\out\NASZE RENDEZ VOUS.234.prg
 tunelen9:
-.byte 100, 0 ; 100 sid\out\NRV.020.prg
-tunelen10:
 .byte 50, 0 ; 50 sid\out\Ritual_II_tune_2.015.prg
-tunelen11:
+tunelen10:
 .byte 202, 58 ; 15050 sid\out\SLODKIEGO MILEGO ZYCIA.510.prg

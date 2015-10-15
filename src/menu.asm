@@ -1,4 +1,6 @@
 
+;test menu
+
 ; obsluga
 ; f1 re-play
 ; f3 stop
@@ -70,5 +72,5 @@ od1		lda songpos,y
 		.include "macros.asm"
 .include "systemsetup.asm"
 		
-*= $2000		
-.incbin "..\gfx\kombilogo.bin"
+;*= $2000		
+;.incbin "..\gfx\kombilogo.bin"
